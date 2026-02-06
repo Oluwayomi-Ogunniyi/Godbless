@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godbless Vikky - Shop</title>
+    <style>
+        /* Reset and Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Notification Bar */
+        .notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #28a745;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            z-index: 1000;
+            display: none;
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .notification.show {
+            display: block;
+            transform: translateY(0);
+        }
+        .notification-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        .notification-text {
+            flex: 1;
+        }
+        .notification-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        .notification-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+        .notification-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Header/Nav */
+        .header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 100;
+            padding: 0.5rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        /* Desktop nav menu */
+
+        .nav-links ul {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            align-items: center;
+        }
+
+        .nav-links ul li {
+            list-style: none;
+        }
+
+        .nav-links ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links ul li a:hover {
+            color: #8b4513; /* your brown theme */
+        }
+        
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            gap: 1rem;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #8B4513;
+            gap: 0.5rem;
+        }
+        .logo img {
+            width: 60px;
+            height: 60px;
+        }
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 250px;
+            flex: 1;
+            max-width: 300px;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: #8B4513;
+        }
+        .order-now-mobile {
+            display: none;
+        }
+        .order-now-mobile a {
+            display: block;
+            background: #8B4513;
+            color: white;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background 0.3s;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .order-now-mobile a:hover {
+            background: #A0522D;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cart-container {
+            position: relative;
+        }
+        .cart-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8B4513;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #A0522D;
+            color: white;
+            border-radius: 50%;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+            min-width: 18px;
+            text-align: center;
+        }
+        .cart-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 350px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 101;
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .cart-dropdown.open {
+            display: block;
+        }
+        .dropdown-header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+        .dropdown-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .cart-item-mini {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .cart-item-mini img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+        .cart-item-mini > div {
+            flex: 1;
+        }
+        .cart-item-mini h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+        .cart-item-mini p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        .qty-mini {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.5rem;
+        }
+        .qty-mini button {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .mini-total {
+            padding: 1rem;
+            text-align: right;
+            font-weight: 700;
+            color: #8B4513;
+        }
+        .cta-header {
+            background: #8B4513;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: block;
+            text-align: center;
+            margin: 1rem;
+        }
+        .cta-header:hover {
+            background: #A0522D;
+        }
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8B4513;
+        }
+        .menu-close {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 102;
+        }
+
+        /* Shop Section */
+        .shop {
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .shop h1 {
+            font-size: 2.5rem;
+            color: #8B4513;
+            margin-bottom: 2rem;
+        }
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+        }
+        .sub-filters {
+            display: none;
+            margin-top: 1rem;
+            width: 100%;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(250px, 1fr));
+            gap: 1.5rem;
+            align-items: start;
+        }
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+        }
+        .product-card.hidden {
+            display: none;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .product-card h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem 0;
+        }
+        .product-card p {
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .stars {
+            color: #FFD700;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .price-container {
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .original-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 1rem;
+            margin-right: 8px;
+        }
+        .current-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #8B4513;
+        }
+        .add-to-cart {
+            width: 100%;
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        .add-to-cart:hover {
+            background: #A0522D;
+        }
+
+        /* Image Preview Modal */
+        #imagePreviewModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        #previewImage {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+        }
+        #closePreview {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            color: white;
+            font-size: 3.5rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Modal - Add to Cart */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+        }
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .modal h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+        .modal .price {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+        .size-options {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .size-btn {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            min-width: 40px;
+        }
+        .size-btn:hover {
+            background: #f0f0f0;
+        }
+        .size-btn.selected {
+            background: #8B4513;
+            color: white;
+            border-color: #8B4513;
+        }
+        .quantity {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 5px;
+        }
+        .quantity button {
+            background: #8B4513;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+        }
+        .quantity span {
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-width: 30px;
+        }
+        #confirmAddBtn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 0.9rem;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+        #confirmAddBtn:hover {
+            background: #218838;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+            margin-top: 4rem;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .footer-section h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .footer-section h3 img {
+            width: 30px;
+            height: 30px;
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        .footer-section ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-section ul li a:hover {
+            color: #8B4513;
+        }
+        .footer-section p {
+            margin-bottom: 0.5rem;
+        }
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid #555;
+            padding-top: 1rem;
+            color: #ccc;
+        }
+
+        /* Mobile Adjustments - only active on smaller screens */
+        @media (max-width: 768px) {
+            .nav {
+                position: relative;
+                padding: 0 1rem;
+            }
+            .logo {
+                font-size: 1.2rem;
+                flex-shrink: 0;
+                z-index: 102;
+                order: 1;
+            }
+            .logo img {
+                width: 50px;
+                height: 50px;
+            }
+            .search-input {
+                order: 2;
+                flex-basis: 100%;
+                width: 100%;
+                max-width: none;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 50%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                padding: 4rem 1.5rem 2rem;
+                box-shadow: 2px 0 15px rgba(0,0,0,0.1);
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                gap: 0;
+                overflow: hidden;
+                z-index: 999;
+                display: flex;
+                list-style: none;
+            }
+            @media (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        top: 0;
+        left: -40%; /* Start off-screen, only 40% of the screen width */
+        width: 40%;
+        height: 100vh; /* Full height of the screen */
+        background: white;
+        transition: left 0.3s ease;
+        z-index: 999;
+        overflow-y: auto; /* Ensure content is scrollable if needed */
+    }
+
+    .nav-links.active {
+        left: 0; /* Slide in to 40% of the screen width */
+    }
+
+    .nav-links ul {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        padding-top: 20px;
+        max-height: 60vh; /* Limit the height of the content to 60% of the screen */
+        overflow-y: auto; /* Allow scrolling if content exceeds 60% height */
+    }
+
+    .nav-links ul li a {
+        display: block;
+        padding: 15px 20px;
+        font-size: 18px;
+    }
+}
+
+            .nav-links.active {
+                transform: translateX(0);
+            }
+            .nav-links.active .menu-close {
+                display: block;
+            }
+            .menu-content {
+                margin-top: 2rem;
+                flex: 1;
+                max-height: 60vh;
+                overflow-y: auto;
+                list-style: none;
+            }
+            .nav-links li {
+                padding: 0.5rem 0;
+            }
+            .nav-links li a {
+                font-size: 1.1rem;
+                padding: 0.5rem;
+                display: block;
+            }
+            .order-now-mobile {
+                display: block;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid #eee;
+            }
+            .nav-right {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                z-index: 102;
+                margin-left: auto;
+                order: 3;
+            }
+            .cart-icon {
+                font-size: 1.3rem;
+            }
+            #order-now {
+                display: none;
+            }
+            .hamburger {
+                display: block;
+                flex-shrink: 0;
+                font-size: 1.3rem;
+            }
+            .cart-dropdown {
+                position: fixed !important;
+                top: 70px !important;
+                left: 0 !important;
+                right: 0 !important;
+                width: calc(100% - 2rem) !important;
+                margin: 0 1rem !important;
+                max-height: calc(100vh - 80px) !important;
+                z-index: 1000 !important;
+                border-radius: 10px !important;
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+            }
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            .modal-content {
+                margin: 10% auto;
+                width: 95%;
+            }
+            .notification-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            .notification-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+            /* MOBILE PRODUCT CARD */
+            .product-card {
+                padding: 0.35rem;
+                border-radius: 12px;
+            }
+            .product-card img {
+                height: 140px;
+                border-radius: 8px;
+                object-fit: cover;
+            }
+            .product-card h3 {
+                font-size: 0.92rem;
+                margin: 0.35rem 0 0.25rem;
+                line-height: 1.2;
+            }
+            .product-card p {
+                font-size: 0.72rem;
+                line-height: 1.25;
+                margin-bottom: 0.35rem;
+            }
+            .stars {
+                font-size: 0.82rem;
+                margin-bottom: 0.35rem;
+            }
+            .price-container {
+                font-size: 0.95rem;
+            }
+            .add-to-cart {
+                padding: 0.55rem;
+                font-size: 0.82rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Notification Bar -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <div class="notification-text" id="notification-text"></div>
+            <div class="notification-buttons">
+                <button class="notification-btn" onclick="continueShopping()">Continue Shopping</button>
+                <a href="cart.html" class="notification-btn">Go to Cart</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header/Nav -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <img src="images/logo.jpg" alt="Godbless Vikky Logo">
+                Godbless Vikky
+            </div>
+            <input type="search" id="search-input" class="search-input" placeholder="Search products...">
+            <div class="nav-links">
+                <button class="menu-close" onclick="closeHamburger()">&times;</button>
+                <div class="menu-content">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li class="order-now-mobile">
+                            <a href="cart.html" class="cta-header">Order Now</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="cart-container">
+                    <div class="cart-icon" onclick="toggleCartDropdown()">🛒<span id="cart-count" class="cart-badge" style="display:none;">0</span></div>
+                    <div id="cart-dropdown" class="cart-dropdown">
+                        <div class="dropdown-header">
+                            <h4>Cart</h4>
+                            <button class="dropdown-close" onclick="closeCartDropdown()">&times;</button>
+                        </div>
+                        <div id="mini-cart-items"></div>
+                        <div id="mini-total" class="mini-total" style="display:none;">Total: ₦0</div>
+                        <a href="cart.html" class="cta-header">View Full Cart</a>
+                    </div>
+                </div>
+                <a href="cart.html" id="order-now" class="cta-header">Order Now</a>
+                <div class="hamburger" onclick="toggleHamburger()">☰</div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Shop Section -->
+    <section class="shop">
+        <div class="container">
+            <h1>Our Collection</h1>
+            <div class="filters">
+                <select id="main-filter" class="filter-select">
+                    <option>All Products</option>
+                    <option>Men</option>
+                    <option>Women</option>
+                </select>
+                <div id="sub-filters" class="sub-filters">
+                    <select id="sub-filter" class="filter-select">
+                        <!-- Options populated dynamically -->
+                    </select>
+                </div>
+            </div>
+            <div class="product-grid" id="product-grid">
+
+                <!-- Men's Shoes (17) - high range + slashed -->
+                <div class="product-card men shoes" data-name="Men's Classic Oxford" data-price="69999">
+                    <img src="images/Male shoe 1.jpg" alt="Men's Classic Oxford" loading="lazy" class="preview-trigger">
+                    <h3>Men's Classic Oxford</h3>
+                    <p>Premium full-grain leather oxford for timeless style.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Brogue Shoes" data-price="75999">
+                    <img src="images/Male shoe 2.jpg" alt="Men's Brogue Shoes" loading="lazy" class="preview-trigger">
+                    <h3>Men's Brogue Shoes</h3>
+                    <p>Perforated leather brogues with classic detailing.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Leather Derby" data-price="72999">
+                    <img src="images/Male shoe 3.jpg" alt="Men's Leather Derby" loading="lazy" class="preview-trigger">
+                    <h3>Men's Leather Derby</h3>
+                    <p>Blucher-style derbies in supple calf leather.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Chelsea Boots" data-price="84999">
+                    <img src="images/Male shoe 4.png" alt="Men's Chelsea Boots" loading="lazy" class="preview-trigger">
+                    <h3>Men's Chelsea Boots</h3>
+                    <p>Elastic-sided leather Chelsea boots for easy wear.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Monk Strap" data-price="89999">
+                    <img src="images/Male shoe 5.png" alt="Men's Monk Strap" loading="lazy" class="preview-trigger">
+                    <h3>Men's Monk Strap</h3>
+                    <p>Buckled monk strap shoes in polished leather.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Wingtip Oxford" data-price="78999">
+                    <img src="images/Male shoe 6.png" alt="Men's Wingtip Oxford" loading="lazy" class="preview-trigger">
+                    <h3>Men's Wingtip Oxford</h3>
+                    <p>Medallion wingtip oxfords for formal occasions.</p>
+                    <div class="stars">★★★☆☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Chukka Boots" data-price="69999">
+                    <img src="images/Male shoe 7.png" alt="Men's Chukka Boots" loading="lazy" class="preview-trigger">
+                    <h3>Men's Chukka Boots</h3>
+                    <p>Desert-style chukka boots in rugged leather.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Cap Toe" data-price="87999">
+                    <img src="images/Male shoe 8.png" alt="Men's Cap Toe" loading="lazy" class="preview-trigger">
+                    <h3>Men's Cap Toe</h3>
+                    <p>Cap toe derbies with subtle toe cap design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Plain Toe" data-price="74999">
+                    <img src="images/Male shoe 9.png" alt="Men's Plain Toe" loading="lazy" class="preview-trigger">
+                    <h3>Men's Plain Toe</h3>
+                    <p>Sleek plain toe bluchers for modern elegance.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Double Monk" data-price="92999">
+                    <img src="images/Male shoe 10.png" alt="Men's Double Monk" loading="lazy" class="preview-trigger">
+                    <h3>Men's Double Monk</h3>
+                    <p>Double buckle monk straps in rich leather.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 11" data-price="81999">
+                    <img src="images/Male shoe 11.png" alt="Men's Shoe 11" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 11</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 12" data-price="83999">
+                    <img src="images/Male shoe 12.png" alt="Men's Shoe 12" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 12</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 13" data-price="85999">
+                    <img src="images/Male shoe 13.png" alt="Men's Shoe 13" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 13</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 14" data-price="87999">
+                    <img src="images/Male shoe 14.png" alt="Men's Shoe 14" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 14</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 15" data-price="89999">
+                    <img src="images/Male shoe 15.png" alt="Men's Shoe 15" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 15</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 16" data-price="94999">
+                    <img src="images/Male shoe 16.png" alt="Men's Shoe 16" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 16</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men shoes" data-name="Men's Shoe 17" data-price="99999">
+                    <img src="images/Male shoe 17.png" alt="Men's Shoe 17" loading="lazy" class="preview-trigger">
+                    <h3>Men's Shoe 17</h3>
+                    <p>Premium leather design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Men's Half Shoes (4) -->
+                <div class="product-card men halfshoes" data-name="Men's Penny Loafer" data-price="34000">
+                    <img src="images/Male half shoe 1.jpg" alt="Men's Penny Loafer" loading="lazy" class="preview-trigger">
+                    <h3>Men's Penny Loafer</h3>
+                    <p>Classic penny slot loafers in soft leather.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men halfshoes" data-name="Men's Tassel Loafer" data-price="43000">
+                    <img src="images/Male half shoe 2.jpg" alt="Men's Tassel Loafer" loading="lazy" class="preview-trigger">
+                    <h3>Men's Tassel Loafer</h3>
+                    <p>Tassel-accented loafers for casual sophistication.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men halfshoes" data-name="Men's Leather Moccasin" data-price="48000">
+                    <img src="images/Male half shoe 3.png" alt="Men's Leather Moccasin" loading="lazy" class="preview-trigger">
+                    <h3>Men's Leather Moccasin</h3>
+                    <p>Hand-stitched moccasins in genuine leather.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men halfshoes" data-name="Men's Boat Shoe" data-price="31000">
+                    <img src="images/Male half shoe 4.png" alt="Men's Boat Shoe" loading="lazy" class="preview-trigger">
+                    <h3>Men's Boat Shoe</h3>
+                    <p>Leather boat shoes with rope detailing.</p>
+                    <div class="stars">★★★☆☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Men's Palms (22) -->
+                <div class="product-card men palm" data-name="Men's Palm 1" data-price="38000">
+                    <img src="image/Male palm 1.png" alt="Men's Palm 1" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 1</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 2" data-price="39000">
+                    <img src="image/Male palm 2.png" alt="Men's Palm 2" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 2</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 3" data-price="40000">
+                    <img src="image/Male palm 3.png" alt="Men's Palm 3" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 3</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 4" data-price="41000">
+                    <img src="image/Male palm 4.png" alt="Men's Palm 4" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 4</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 5" data-price="42000">
+                    <img src="image/Male palm 5.png" alt="Men's Palm 5" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 5</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 6" data-price="43000">
+                    <img src="image/Male palm 6.png" alt="Men's Palm 6" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 6</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 7" data-price="44000">
+                    <img src="image/Male palm 7.png" alt="Men's Palm 7" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 7</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 8" data-price="45000">
+                    <img src="image/Male palm 8.png" alt="Men's Palm 8" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 8</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 9" data-price="46000">
+                    <img src="image/Male palm 9.png" alt="Men's Palm 9" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 9</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 10" data-price="47000">
+                    <img src="image/Male palm 10.png" alt="Men's Palm 10" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 10</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 11" data-price="48000">
+                    <img src="image/Male palm 11.png" alt="Men's Palm 11" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 11</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 12" data-price="49000">
+                    <img src="image/Male palm 12.png" alt="Men's Palm 12" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 12</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 13" data-price="50000">
+                    <img src="image/Male palm 13.png" alt="Men's Palm 13" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 13</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 14" data-price="31000">
+                    <img src="image/Male palm 14.png" alt="Men's Palm 14" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 14</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 15" data-price="32000">
+                    <img src="image/Male palm 15.png" alt="Men's Palm 15" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 15</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 16" data-price="33000">
+                    <img src="image/Male palm 16.png" alt="Men's Palm 16" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 16</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 17" data-price="34000">
+                    <img src="image/Male palm 17.png" alt="Men's Palm 17" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 17</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 18" data-price="35000">
+                    <img src="image/Male palm 18.png" alt="Men's Palm 18" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 18</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 19" data-price="36000">
+                    <img src="image/Male palm 19.png" alt="Men's Palm 19" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 19</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 20" data-price="37000">
+                    <img src="image/Male palm 20.png" alt="Men's Palm 20" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 20</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 21" data-price="38000">
+                    <img src="image/Male palm 21.png" alt="Men's Palm 21" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 21</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card men palm" data-name="Men's Palm 22" data-price="39000">
+                    <img src="image/Male palm 22.png" alt="Men's Palm 22" loading="lazy" class="preview-trigger">
+                    <h3>Men's Palm 22</h3>
+                    <p>Comfortable palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+                <!-- Women's Palms (16) -->
+                <div class="product-card women palm" data-name="Women's Palm 1" data-price="44000">
+                    <img src="images/Women palm 1.png" alt="Women's Palm 1" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 1</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 2" data-price="45000">
+                    <img src="images/Women palm 2.png" alt="Women's Palm 2" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 2</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 3" data-price="46000">
+                    <img src="images/Women palm 3.png" alt="Women's Palm 3" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 3</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 4" data-price="47000">
+                    <img src="images/Women palm 4.png" alt="Women's Palm 4" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 4</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 5" data-price="48000">
+                    <img src="images/Women palm 5.png" alt="Women's Palm 5" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 5</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 6" data-price="49000">
+                    <img src="images/Women palm 6.png" alt="Women's Palm 6" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 6</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 7" data-price="50000">
+                    <img src="images/Women palm 7.png" alt="Women's Palm 7" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 7</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 8" data-price="41000">
+                    <img src="images/Women palm 8.png" alt="Women's Palm 8" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 8</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 9" data-price="42000">
+                    <img src="images/Women palm 9.png" alt="Women's Palm 9" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 9</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 10" data-price="43000">
+                    <img src="images/Women palm 10.png" alt="Women's Palm 10" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 10</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 11" data-price="44000">
+                    <img src="images/Women palm 11.png" alt="Women's Palm 11" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 11</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 12" data-price="45000">
+                    <img src="images/Women palm 12.png" alt="Women's Palm 12" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 12</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 13" data-price="46000">
+                    <img src="images/Women palm 13.png" alt="Women's Palm 13" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 13</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 14" data-price="47000">
+                    <img src="images/Women palm 14.png" alt="Women's Palm 14" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 14</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 15" data-price="48000">
+                    <img src="images/Women palm 15.png" alt="Women's Palm 15" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 15</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★★</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card women palm" data-name="Women's Palm 16" data-price="49000">
+                    <img src="images/Women palm 16.png" alt="Women's Palm 16" loading="lazy" class="preview-trigger">
+                    <h3>Women's Palm 16</h3>
+                    <p>Stylish palm design.</p>
+                    <div class="stars">★★★★☆</div>
+                    <div class="price-container"></div>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Preview Modal -->
+    <div id="imagePreviewModal">
+        <span id="closePreview">&times;</span>
+        <img id="previewImage" src="" alt="Product Preview">
+    </div>
+
+    <!-- Add to Cart Modal -->
+    <div id="addToCartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">×</span>
+            <h3 id="modalProductName">Please select a variation</h3>
+            <div class="price" id="modalProductPrice"></div>
+            <div class="size-options" id="modalSizeOptions"></div>
+            <div class="quantity">
+                <button onclick="updateQuantity(-1)">-</button>
+                <span id="quantity">1</span>
+                <button onclick="updateQuantity(1)">+</button>
+            </div>
+            <button id="confirmAddBtn">Confirm & Add to Cart</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <img src="images/logo.jpg" alt="Godbless Vikky Logo">
+                        Godbless Vikky
+                    </h3>
+                    <p>Crafted with love since 2025. Authentic leather for every step.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: theqlipdigital@gmail.com</p>
+                    <p>Phone: 07087342882</p>
+                    <p>Address: The Qlip House, Lagos-Ibadan Expressway, Nigeria</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 God Bless Shoes. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        let currentProduct = null;
+        let currentQuantity = 1;
+        let selectedSize = null;
+
+        function getSizes(productClass) {
+            if (productClass.includes('men') && (productClass.includes('shoes') || productClass.includes('halfshoes'))) {
+                return ['40', '41', '42', '43', '44', '45', '46'];
+            }
+            return ['S', 'M', 'L', 'XL'];
+        }
+
+        function calculateSlashedPrice(price, isHighRange = false) {
+            const p = parseInt(price);
+            let minDisc = isHighRange ? 0.11 : 0.10;
+            let maxDisc = isHighRange ? 0.30 : 0.28;
+            let rangeMin = isHighRange ? 69999 : 30000;
+            let rangeMax = isHighRange ? 99999 : 50000;
+
+            const factor = Math.min(1, Math.max(0, (p - rangeMin) / (rangeMax - rangeMin)));
+            const discountRate = minDisc + factor * (maxDisc - minDisc);
+            const slashed = Math.round(p / (1 - discountRate));
+            return { current: p, slashed };
+        }
+
+        // Apply slashed prices
+        document.querySelectorAll('.product-card').forEach(card => {
+            const price = card.dataset.price;
+            if (!price) return;
+
+            const isHighRange = card.classList.contains('men') && card.classList.contains('shoes');
+            const { current, slashed } = calculateSlashedPrice(price, isHighRange);
+
+            const container = card.querySelector('.price-container');
+            if (container) {
+                container.innerHTML = `
+                    <span class="original-price">₦${slashed.toLocaleString()}</span>
+                    <span class="current-price">₦${current.toLocaleString()}</span>
+                `;
+            }
+        });
+
+        // Image preview
+        document.querySelectorAll('.preview-trigger').forEach(img => {
+            img.addEventListener('click', e => {
+                e.stopPropagation();
+                document.getElementById('previewImage').src = img.src;
+                document.getElementById('imagePreviewModal').style.display = 'flex';
+            });
+        });
+
+        document.getElementById('closePreview').onclick = () => {
+            document.getElementById('imagePreviewModal').style.display = 'none';
+        };
+
+        document.getElementById('imagePreviewModal').onclick = e => {
+            if (e.target.id === 'imagePreviewModal') {
+                document.getElementById('imagePreviewModal').style.display = 'none';
+            }
+        };
+
+        // Cart & Modal logic
+        document.querySelectorAll('.add-to-cart').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentProduct = btn.closest('.product-card');
+                const name = currentProduct.querySelector('h3').textContent;
+                const priceText = currentProduct.querySelector('.current-price').textContent.replace(/[^0-9]/g, '');
+                const price = parseInt(priceText);
+
+                document.getElementById('modalProductName').textContent = name;
+                document.getElementById('modalProductPrice').textContent = `₦${price.toLocaleString()}`;
+
+                const sizeOptions = document.getElementById('modalSizeOptions');
+                sizeOptions.innerHTML = '';
+                getSizes(currentProduct.className).forEach(size => {
+                    const b = document.createElement('button');
+                    b.className = 'size-btn';
+                    b.textContent = size;
+                    b.onclick = () => {
+                        document.querySelectorAll('.size-btn').forEach(el => el.classList.remove('selected'));
+                        b.classList.add('selected');
+                        selectedSize = size;
+                    };
+                    sizeOptions.appendChild(b);
+                });
+
+                currentQuantity = 1;
+                selectedSize = null;
+                document.getElementById('quantity').textContent = 1;
+                document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+
+                document.getElementById('addToCartModal').style.display = 'block';
+
+                document.getElementById('confirmAddBtn').onclick = () => {
+                    if (!selectedSize) {
+                        alert("Please select a size first.");
+                        return;
+                    }
+                    const imgSrc = currentProduct.querySelector('img').src;
+                    const key = name + ' - ' + selectedSize;
+                    const existing = cart.find(i => i.key === key);
+                    if (existing) {
+                        existing.qty += currentQuantity;
+                    } else {
+                        cart.push({ name, price, size: selectedSize, qty: currentQuantity, key, img: imgSrc });
+                    }
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    updateCart();
+                    showNotification(`Added: ${name} (${selectedSize}) × ${currentQuantity}`);
+                    closeModal();
+                };
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('addToCartModal').style.display = 'none';
+        }
+
+        function updateQuantity(delta) {
+            currentQuantity = Math.max(1, currentQuantity + delta);
+            document.getElementById('quantity').textContent = currentQuantity;
+        }
+
+        function showNotification(text) {
+            const n = document.getElementById('notification');
+            document.getElementById('notification-text').textContent = text;
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 5000);
+        }
+
+        function continueShopping() {
+            document.getElementById('notification').classList.remove('show');
+        }
+
+        function updateCart() {
+            const count = cart.reduce((sum, i) => sum + i.qty, 0);
+            document.getElementById('cart-count').textContent = count;
+            document.getElementById('cart-count').style.display = count > 0 ? 'block' : 'none';
+        }
+
+        function toggleCartDropdown() {
+            document.getElementById('cart-dropdown').classList.toggle('open');
+        }
+
+        function closeCartDropdown() {
+            document.getElementById('cart-dropdown').classList.remove('open');
+        }
+
+        function toggleHamburger() {
+            event.stopPropagation();
+            const menu = document.querySelector('.nav-links');
+
+            menu.classList.toggle('active');
+
+            // lock scroll when open
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function closeHamburger() {
+            document.querySelector('.nav-links').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Filter functions (your original)
+        function populateSubFilter() {
+            const mainFilter = document.getElementById('main-filter').value;
+            const subSelect = document.getElementById('sub-filter');
+            const subFiltersDiv = document.getElementById('sub-filters');
+            subSelect.innerHTML = '<option value="">All</option>';
+            if (mainFilter === 'Men') {
+                ['Shoes', 'Half Shoes', 'Palm'].forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat.toLowerCase().replace(' ', '');
+                    opt.textContent = cat;
+                    subSelect.appendChild(opt);
+                });
+                subFiltersDiv.style.display = 'block';
+            } else if (mainFilter === 'Women') {
+                ['Palm'].forEach(cat => {
+                    const opt = document.createElement('option');
+                    opt.value = cat.toLowerCase();
+                    opt.textContent = cat;
+                    subSelect.appendChild(opt);
+                });
+                subFiltersDiv.style.display = 'block';
+            } else {
+                subFiltersDiv.style.display = 'none';
+            }
+            filterProducts();
+        }
+
+        function filterProducts() {
+            const mainFilter = document.getElementById('main-filter').value.toLowerCase();
+            const subFilter = document.getElementById('sub-filter').value;
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                const classes = card.classList;
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const desc = card.querySelector('p').textContent.toLowerCase();
+                let show = true;
+                if (mainFilter !== 'all products') {
+                    if (!classes.contains(mainFilter)) show = false;
+                }
+                if (subFilter && mainFilter !== 'all products') {
+                    if (!classes.contains(subFilter)) show = false;
+                }
+                if (searchTerm && show) {
+                    if (!name.includes(searchTerm) && !desc.includes(searchTerm)) show = false;
+                }
+                card.classList.toggle('hidden', !show);
+            });
+        }
+
+        document.getElementById('main-filter').addEventListener('change', populateSubFilter);
+        document.getElementById('sub-filter').addEventListener('change', filterProducts);
+        document.getElementById('search-input').addEventListener('input', filterProducts);
+
+        // Init
+        updateCart();
+        populateSubFilter();
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) closeModal();
+        };
+        function toggleHamburger() {
+    event.stopPropagation();
+    const menu = document.querySelector('.nav-links');
+
+    menu.classList.toggle('active');
+
+    // Lock background scroll when menu is open
+    document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+}
+
+function closeHamburger() {
+    const menu = document.querySelector('.nav-links');
+    menu.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// Click outside to close menu & cart
+document.addEventListener('click', function(e) {
+
+    // Cart dropdown close
+    const dropdown = document.getElementById('cart-dropdown');
+    const icon = document.querySelector('.cart-icon');
+
+    if (dropdown && icon && !icon.contains(e.target) && !dropdown.contains(e.target)) {
+        closeCartDropdown();
+    }
+
+    // Hamburger menu close
+    const menu = document.querySelector('.nav-links');
+    const hamburger = document.querySelector('.hamburger');
+
+    if (menu && hamburger && !hamburger.contains(e.target) && !menu.contains(e.target)) {
+        closeHamburger();
+    }
+
+});
+
+    </script>
+    
+</body>
+</html>
