@@ -25,25 +25,14 @@
             padding: 0 2rem;
         }
 
-        /* Header/Nav - Consistent separate heights */
+        /* Header/Nav - Consistent reduced height */
         .header {
             position: sticky;
             top: 0;
             background: rgba(255, 255, 255, 0.95);
             z-index: 100;
+            padding: 0.5rem 0; /* Matches shop & about */
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        @media (min-width: 769px) {
-            .header {
-                padding: 1rem 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                padding: 0.5rem 0;
-            }
         }
 
         .nav {
@@ -63,7 +52,6 @@
             font-weight: 700;
             color: #8B4513;
             gap: 0.5rem;
-            text-decoration: none;
         }
 
         .logo img {
@@ -236,7 +224,7 @@
             color: #8B4513;
         }
 
-        .cta-header {
+        .cta-header, .cta-btn {
             background: #8B4513;
             color: white;
             padding: 0.6rem 1.5rem;
@@ -247,9 +235,11 @@
             display: block;
             text-align: center;
             margin: 1rem;
+            border: none;
+            cursor: pointer;
         }
 
-        .cta-header:hover {
+        .cta-header:hover, .cta-btn:hover {
             background: #A0522D;
         }
 
@@ -385,6 +375,75 @@
             display: block;
             color: #8B4513;
             margin-bottom: 0.5rem;
+        }
+
+        /* Ordered Items Section */
+        .order-items-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .order-items-section h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .order-item-track {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-item-track:last-child {
+            border-bottom: none;
+        }
+
+        .order-item-track img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .order-item-track .details {
+            flex: 1;
+        }
+
+        .order-item-track .details h4 {
+            margin: 0 0 0.4rem;
+            font-size: 1.05rem;
+            color: #333;
+        }
+
+        .order-item-track .details p {
+            margin: 0;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .order-item-track .price-qty {
+            text-align: right;
+            min-width: 140px;
+            font-weight: 600;
+            color: #8B4513;
+        }
+
+        @media (max-width: 600px) {
+            .order-item-track {
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+            .order-item-track .price-qty {
+                text-align: left;
+                margin-top: 0.5rem;
+                width: 100%;
+            }
         }
 
         /* Timeline */
@@ -732,6 +791,12 @@
                         </div>
                     </div>
 
+                    <!-- Ordered Items Section -->
+                    <div class="order-items-section">
+                        <h3>Ordered Items</h3>
+                        <div id="order-items-list"></div>
+                    </div>
+
                     <div class="timeline" id="timeline-container"></div>
                 </div>
             </div>
@@ -748,9 +813,37 @@
         </div>
     </section>
 
-    <!-- Footer - unchanged -->
+    <!-- Footer (add your footer content here if needed) -->
     <footer class="footer">
-        <!-- ... your footer content ... -->
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <img src="images/logo.jpg" loading="lazy" alt="Godbless Vikky Logo">
+                        Godbless Vikky
+                    </h3>
+                    <p>Crafted with class since 2015.<br>Authentic leather for every step.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <p>Email: godblesssezy@gmail.com</p>
+                    <p>Phone: 07032544561</p>
+                    <p>Address: 10, Ayinde Olu Street, Mowe, Ogun State, Nigeria.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 God Bless Shoes. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
     <script type="module">
@@ -760,7 +853,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
         import { getDatabase, ref, onValue, get } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-        // FIXED CONFIG - corrected malformed databaseURL
         const firebaseConfig = {
             apiKey: "AIzaSyDcdS3z6Y3Z8qlBrF8XwmbShbt_gYJitZk",
             authDomain: "godblessvikky.firebaseapp.com",
@@ -771,12 +863,11 @@
             appId: "1:1019093424786:web:d943231946f622ab61e44b"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
         // ───────────────────────────────────────────────────────────────
-        //                    YOUR EXISTING CART & NAV CODE
+        //                    CART & NAV CODE
         // ───────────────────────────────────────────────────────────────
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
@@ -889,7 +980,6 @@
                 return;
             }
 
-            // Normalize key: replace non-alphanumeric chars with underscore
             const dbKey = trackingRef.replace(/[^a-zA-Z0-9]/g, '_');
 
             const statusDiv     = document.getElementById('order-status');
@@ -898,7 +988,6 @@
             const errorText     = document.getElementById('error-text');
             const timeline      = document.getElementById('timeline-container');
 
-            // Reset UI
             statusDiv.style.display = 'none';
             noOrderDiv.style.display = 'none';
             errorDiv.style.display = 'none';
@@ -913,10 +1002,8 @@
                     return;
                 }
 
-                // Initial render
                 renderOrderData(snapshot.val(), trackingRef);
 
-                // Real-time listener
                 onValue(truckRef, (snap) => {
                     if (snap.exists()) {
                         renderOrderData(snap.val(), trackingRef);
@@ -933,15 +1020,45 @@
         }
 
         function renderOrderData(order, originalRef) {
-            // Fill basic info
             document.getElementById('status-ref').textContent     = originalRef;
-            document.getElementById('est-delivery').textContent   = order.estimatedDelivery || 'TBD';
+            document.getElementById('est-delivery').textContent   = order.estimatedDelivery || 'Delivery within 3 to 5 business days';
             document.getElementById('current-status').textContent = order.currentStatus || 'Unknown';
             document.getElementById('status-total').textContent   = 
                 order.total ? `₦${Number(order.total).toLocaleString()}` : '—';
 
+            // Render ordered items
+            const itemsList = document.getElementById('order-items-list');
+            if (itemsList) {
+                itemsList.innerHTML = '';
+
+                if (order.items && Array.isArray(order.items) && order.items.length > 0) {
+                    order.items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'order-item-track';
+
+                        const imgSrc = item.img || 'images/placeholder.jpg';
+
+                        div.innerHTML = `
+                            <img src="${imgSrc}" alt="${item.name || 'Product'}">
+                            <div class="details">
+                                <h4>${item.name || 'Item'} ${item.size ? `(${item.size})` : ''}</h4>
+                                <p>₦${Number(item.price || 0).toLocaleString()} × ${item.qty || 1}</p>
+                            </div>
+                            <div class="price-qty">
+                                ₦${Number((item.price || 0) * (item.qty || 1)).toLocaleString()}
+                            </div>
+                        `;
+
+                        itemsList.appendChild(div);
+                    });
+                } else {
+                    itemsList.innerHTML = '<p style="color:#777; text-align:center; padding:1.5rem 0;">No items found in this order.</p>';
+                }
+            }
+
+            // Timeline
             const timeline = document.getElementById('timeline-container');
-            timeline.innerHTML = ''; // clear previous
+            timeline.innerHTML = '';
 
             const steps = [
                 { key: 'confirmed',    title: 'Order Confirmed',   desc: 'Your payment was successful and order has been received.' },
@@ -974,15 +1091,12 @@
             });
         }
 
-        // Expose trackOrder to global scope so onclick="trackOrder()" can find it
         window.trackOrder = trackOrder;
 
-        // Enter key support
         document.getElementById('tracking-id')?.addEventListener('keypress', e => {
             if (e.key === 'Enter') trackOrder();
         });
 
-        // Init
         updateCart();
     </script>
 </body>
